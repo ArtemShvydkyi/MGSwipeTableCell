@@ -829,6 +829,47 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     [self refreshContentView];
 }
 
+#pragma mark Accessibility
+-(NSInteger)accessibilityElementCount
+{
+    return self.rightButtons.count + self.leftButtons.count;
+}
+
+-(nullable id)accessibilityElementAtIndex:(NSInteger)index
+{
+    if ( index >= self.leftButtons.count ) {
+        return self.rightButtons[index - self.leftButtons.count];
+    }
+    else {
+        return self.leftButtons[index];
+    }
+}
+
+-(NSInteger)indexOfAccessibilityElement:(id)element
+{
+    NSInteger index = [self.leftButtons indexOfObject:element];
+    if ( index != NSNotFound ) {
+        return index;
+    }
+    else {
+        index = [self.rightButtons indexOfObject:element];
+        if ( index != NSNotFound ) {
+            return index + self.leftButtons.count;
+        }
+        else {
+            return NSNotFound;
+        }
+    }
+}
+
+-(NSArray*)accessibilityElements
+{
+    NSMutableArray *accessibilityElements = [NSMutableArray arrayWithArray:self.leftButtons];
+    [accessibilityElements addObjectsFromArray:self.rightButtons];
+    
+    return accessibilityElements;
+}
+
 #pragma mark Handle Table Events
 
 -(void) willMoveToSuperview:(UIView *)newSuperview;
