@@ -1142,8 +1142,9 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         [timer invalidate];
         _displayLink = nil;
         if (_animationCompletion) {
-            _animationCompletion(YES);
+            void(^ws_animation)(BOOL finihed) = _animationCompletion;
             _animationCompletion = nil;
+            ws_animation (YES);
         }
     }
 }
